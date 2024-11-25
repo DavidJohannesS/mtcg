@@ -1,20 +1,24 @@
 package uni.local;
 
 import java.io.IOException;
-import uni.local.controllers.UserController;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+import uni.local.controllers.PostgresContainerManager;
+import uni.local.controllers.UserController;
 
 public class Server {
     private ServerSocket serverSocket;
 
     public void start() {
+        // Start the PostgreSQL container
+        PostgresContainerManager.startContainer();
+
         try {
-            serverSocket = new ServerSocket(8000);
-            System.out.println("Server started on port 8000...");
+            serverSocket = new ServerSocket(10001);
+            System.out.println("Server started on port 10001...");
 
             while (true) {
                 try (Socket clientSocket = serverSocket.accept();
@@ -36,7 +40,7 @@ public class Server {
         }
     }
 
-    private String readRequestBody(BufferedReader in) throws Exception {
+    private String readRequestBody(BufferedReader in) throws IOException {
         StringBuilder body = new StringBuilder();
         while (in.ready()) {
             body.append((char) in.read());
@@ -46,12 +50,12 @@ public class Server {
 
     private String handleRequest(String request, String requestBody) {
         UserController userController = new UserController();
-        if (request.startsWith("POST /register")) {
+        if (request.startsWith("POST /users")) {
             return userController.register(requestBody);
-        } else if (request.startsWith("POST /login")) {
+        } else if (request.startsWith("POST /sessions")) {
             return userController.login(requestBody);
         } else {
-            return "HTTP/1.1 404 Not Found\r\n\r\n";
+            return "HTTP/1.1 418 Not Found\r\n\r\n";
         }
     }
 
@@ -63,4 +67,10 @@ public class Server {
             e.printStackTrace();
         }
     }
+
+    public static void main(String[] args) {
+        Server server = new Server();
+        server.start();
+    }
 }
+

@@ -5,5 +5,4 @@ public class Card {
     private int damage;
     private String elementType;
 
-    // Constructor, getters, and setters
 }

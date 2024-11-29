@@ -7,13 +7,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import uni.local.controllers.PostgresContainerManager;
-import uni.local.controllers.UserController;
+import uni.local.RestHandler;
 
 public class Server {
     private ServerSocket serverSocket;
+    private final RestHandler restHandler = new RestHandler();
 
     public void start() {
-        // Start the PostgreSQL container
         PostgresContainerManager.startContainer();
 
         try {
@@ -31,7 +31,7 @@ public class Server {
                         request.append(line).append("\n");
                     }
                     String requestBody = readRequestBody(in);
-                    String response = handleRequest(request.toString(), requestBody);
+                    String response = restHandler.handleRequest(request.toString(), requestBody);
                     out.write(response.getBytes());
                 }
             }
@@ -46,17 +46,6 @@ public class Server {
             body.append((char) in.read());
         }
         return body.toString();
-    }
-
-    private String handleRequest(String request, String requestBody) {
-        UserController userController = new UserController();
-        if (request.startsWith("POST /users")) {
-            return userController.register(requestBody);
-        } else if (request.startsWith("POST /sessions")) {
-            return userController.login(requestBody);
-        } else {
-            return "HTTP/1.1 418 Not Found\r\n\r\n";
-        }
     }
 
     public void stop() {

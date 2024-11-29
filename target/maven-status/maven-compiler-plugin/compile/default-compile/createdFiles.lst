@@ -1,5 +1,7 @@
+uni/local/utils/DbConnection.class
 uni/local/utils/http/ResponseBuilder$ResponseBuilderBuilder.class
 uni/local/Server.class
+uni/local/RestHandler.class
 uni/local/utils/http/ResponseService.class
 uni/local/Main.class
 uni/local/models/Card.class

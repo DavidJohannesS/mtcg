@@ -2,8 +2,11 @@
 /gitrepos/uni/courses/java/mtcg/src/main/java/uni/local/repository/UserRepository.java
 /gitrepos/uni/courses/java/mtcg/src/main/java/uni/local/services/UserService.java
 /gitrepos/uni/courses/java/mtcg/src/main/java/uni/local/models/Card.java
+/gitrepos/uni/courses/java/mtcg/src/main/java/uni/local/utils/http/Constants.java
 /gitrepos/uni/courses/java/mtcg/src/main/java/uni/local/Server.java
+/gitrepos/uni/courses/java/mtcg/src/main/java/uni/local/utils/http/ResponseBuilder.java
 /gitrepos/uni/courses/java/mtcg/src/main/java/uni/local/controllers/PostgresContainerManager.java
 /gitrepos/uni/courses/java/mtcg/src/main/java/uni/local/models/User.java
 /gitrepos/uni/courses/java/mtcg/src/main/java/uni/local/utils/TokenGenerator.java
+/gitrepos/uni/courses/java/mtcg/src/main/java/uni/local/utils/http/ResponseService.java
 /gitrepos/uni/courses/java/mtcg/src/main/java/uni/local/Main.java

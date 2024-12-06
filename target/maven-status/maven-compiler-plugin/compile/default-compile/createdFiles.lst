@@ -8,8 +8,8 @@ uni/local/models/Card.class
 uni/local/utils/http/ResponseBuilder.class
 uni/local/repository/UserRepository.class
 uni/local/controllers/PostgresContainerManager.class
-uni/local/services/UserService.class
 uni/local/models/User.class
+uni/local/services/UserService.class
 uni/local/controllers/PostgresContainerManager$1.class
 uni/local/controllers/UserController.class
 uni/local/utils/TokenGenerator.class

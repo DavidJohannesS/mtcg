@@ -1,0 +1,13 @@
+---
+# test vars, change to vault file for prod
+
+postgres_img: "postgres"
+postgres_ver: "17.2"
+postgres_container: "mtcg_postgres"
+postgres_port: 5432
+postgres_volume: "mtcg_db_v"
+
+# db creds
+postgres_user: "postgres"
+postgres_pwd: "testpwd"
+postgres_db: "mtcg"

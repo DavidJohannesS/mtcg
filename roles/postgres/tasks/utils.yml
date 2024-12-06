@@ -1,0 +1,35 @@
+---
+- name: Stop container
+  community.docker.docker_container:
+    name: "{{ postgres_container }}"
+    state: stopped
+  tags:
+    - reset
+
+- name: Delete container
+  community.docker.docker_container:
+    name: "{{ postgres_container }}"
+    state: absent
+  tags:
+    - reset
+
+- name: Delete volume
+  community.docker.docker_volume:
+    name: "{{ postgres_volume }}"
+    state: absent
+  tags:
+    - reset
+
+- name: Launch new Postgres DB
+  ansible.builtin.include_tasks: setup.yml
+  tags:
+    - reset
+
+- name: Delete img
+  community.docker.docker_image:
+    name: "{{ postgres_img }}"
+    tag: "{{ postgres_ver }}"
+    state: absent
+  tags:
+    - never
+    - purge

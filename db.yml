@@ -1,0 +1,6 @@
+---
+- name: Postgres Database for MTCG
+  hosts: localhost
+  connection: local
+  roles:
+    - postgres

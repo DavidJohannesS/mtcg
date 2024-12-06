@@ -6,7 +6,6 @@ import java.net.Socket;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import uni.local.controllers.PostgresContainerManager;
 import uni.local.RestHandler;
 
 public class Server {
@@ -14,7 +13,6 @@ public class Server {
     private final RestHandler restHandler = new RestHandler();
 
     public void start() {
-        PostgresContainerManager.startContainer();
 
         try {
             serverSocket = new ServerSocket(10001);

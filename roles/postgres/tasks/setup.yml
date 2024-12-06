@@ -1,0 +1,40 @@
+---
+- name: Setup MTCG Postgres DB
+  tags:
+    - setup
+    - reset
+  block:
+    - name: Pull img
+      community.docker.docker_image:
+        name: "{{ postgres_img }}"
+        tag: "{{ postgres_ver }}"
+        source: pull
+
+    - name: Ensure volume exists
+      community.docker.docker_volume:
+        name: "{{ postgres_volume }}"
+        state: present
+
+    - name: Start container
+      community.docker.docker_container:
+        name: "{{ postgres_container }}"
+        image: "{{ postgres_img }}"
+        state: started
+        published_ports:
+          - "{{ postgres_port }}:5432"
+        volumes:
+          - "{{ postgres_volume }}:/var/lib/postgresql/data"
+        env:
+          POSTGRES_USER: "{{ postgres_user }}"
+          POSTGRES_PASSWORD: "{{ postgres_pwd }}"
+          POSTGRES_DB: "{{ postgres_db }}"
+
+    - name: Wait for init
+      ansible.builtin.wait_for:
+        host: "{{ ansible_host }}"
+        port: "{{ postgres_port }}"
+        delay: 10
+        timeout: 300
+
+    - name: Create tables
+      ansible.builtin.include_tasks: create_tables.yml

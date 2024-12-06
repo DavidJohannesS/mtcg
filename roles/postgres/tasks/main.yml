@@ -1,0 +1,10 @@
+---
+# tasks file for postgres
+- name: Setup
+  ansible.builtin.include_tasks: setup.yml
+
+- name: Remove/Reset
+  ansible.builtin.include_tasks: utils.yml
+  tags:
+    - utils
+    - never

@@ -25,11 +25,15 @@ public class Server {
 
                     String line;
                     StringBuilder request = new StringBuilder();
+                    String authHeader = null;
                     while (!(line = in.readLine()).isEmpty()) {
                         request.append(line).append("\n");
+                        if (line.startsWith("Authorization:")) {
+                            authHeader = line.substring("Authorization:".length()).trim();
+                        }
                     }
                     String requestBody = readRequestBody(in);
-                    String response = restHandler.handleRequest(request.toString(), requestBody);
+                    String response = restHandler.handleRequest(request.toString(), requestBody, authHeader);
                     out.write(response.getBytes());
                 }
             }

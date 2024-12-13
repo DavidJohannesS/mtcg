@@ -1,11 +1,9 @@
 ---
-- name: Copy setup_tables.sql into container
-  community.docker.docker_container_copy_into:
-    container: "{{ postgres_container }}"
-    path: "{{ role_path }}/files/tables.sql"
-    container_path: /tmp/tables.sql
-
-- name: Run sql script
-  community.docker.docker_container_exec:
-    container: "{{ postgres_container }}"
-    command: psql -U "{{ postgres_user }}" -d "{{ postgres_db }}" -f /tmp/tables.sql
+- name: Execute SQL script to create tables
+  community.postgresql.postgresql_query:
+    db: "{{ postgres_db }}"
+    port: "{{ postgres_port }}"
+    login_user: "{{ postgres_user }}"
+    login_password: "{{ postgres_pwd }}"
+    host: "{{ ansible_host }}"
+    query: "{{ lookup('file', '{{ role_path }}/files/tables.sql') }}"

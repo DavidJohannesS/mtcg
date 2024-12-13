@@ -12,12 +12,13 @@ public class UserRepository
 {
     public void save ( User user ) throws SQLException
     {
-        String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        String sql = "INSERT INTO users (username, password,coins) VALUES (?, ?, ?)";
         try ( Connection conn = DbConnection.getInstance();
               PreparedStatement pstmt = conn.prepareStatement( sql ) )
         {
             pstmt.setString( 1, user.getUsername() );
             pstmt.setString( 2, user.getPassword() );
+            pstmt.setInt( 3, user.getCoins() );
             pstmt.executeUpdate();
         }
     }
@@ -51,7 +52,7 @@ public class UserRepository
             {
                 if ( rs.next() )
                 {
-                    return new User( rs.getString( "username" ), rs.getString( "password" ) );
+                    return new User( rs.getString( "username" ), rs.getString( "password" ), rs.getInt( "coins" ) );
                 }
             }
         }

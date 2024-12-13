@@ -1,0 +1,28 @@
+[
+  {
+    "Id": "ed1dc1bc-f0aa-4a0c-8d43-1402189b33c8",
+    "Name": "WaterGoblin",
+    "Damage": 10.0
+  },
+  {
+    "Id": "65ff5f23-1e70-4b79-b3bd-f6eb679dd3b5",
+    "Name": "Dragon",
+    "Damage": 50.0
+  },
+  {
+    "Id": "55ef46c4-016c-4168-bc43-6b9b1e86414f",
+    "Name": "WaterSpell",
+    "Damage": 20.0
+  },
+  {
+    "Id": "f3fad0f2-a1af-45df-b80d-2e48825773d9",
+    "Name": "Ork",
+    "Damage": 45.0
+  },
+  {
+    "Id": "8c20639d-6400-4534-bd0f-ae563f11f57a",
+    "Name": "WaterSpell",
+    "Damage": 25.0
+  }
+]
+

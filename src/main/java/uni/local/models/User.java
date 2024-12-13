@@ -1,19 +1,18 @@
 package uni.local.models;
 
-public class User {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+//import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+//@NoArgsConstructor
+public class User
+{
     private final String username;
     private final String password;
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
+    private int coins;
 }
+

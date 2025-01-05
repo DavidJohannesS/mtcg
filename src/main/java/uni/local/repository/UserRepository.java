@@ -2,7 +2,6 @@ package uni.local.repository;
 
 import uni.local.models.User;
 import uni.local.utils.DbConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -58,5 +57,35 @@ public class UserRepository
         }
         return null;
     }
+    public void updateUserCoins(int userId, int newCoinCount, Connection conn) throws SQLException
+    {
+        String sql = "UPDATE users SET coins = ? WHERE id = ?";
+        try(PreparedStatement pstmt = conn.prepareStatement(sql))
+        {
+            pstmt.setInt(1, newCoinCount);
+            pstmt.setInt(2, userId);
+            pstmt.executeUpdate();
+        }
+    }
+    public User findById(int userId) {
+    String sql = "SELECT * FROM users WHERE id = ?";
+    try (Connection conn = DbConnection.getInstance();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setInt(1, userId);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            return new User(
+                rs.getInt("id"), // Ensure the ID is set
+                rs.getString("username"),
+                rs.getString("password"),
+                rs.getInt("coins")
+            );
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+
 }
 

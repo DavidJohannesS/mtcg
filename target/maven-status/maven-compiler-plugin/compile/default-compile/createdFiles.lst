@@ -10,11 +10,12 @@ uni/local/utils/http/ResponseService.class
 uni/local/Main.class
 uni/local/services/PackageService.class
 uni/local/models/Card.class
+uni/local/repository/CardRepository.class
 uni/local/utils/http/ResponseBuilder.class
 uni/local/repository/UserRepository.class
 uni/local/controllers/PackageController.class
 uni/local/services/UserService.class
 uni/local/models/User.class
-uni/local/controllers/UserController.class
 uni/local/utils/TokenGenerator.class
+uni/local/controllers/UserController.class
 uni/local/utils/http/Constants.class

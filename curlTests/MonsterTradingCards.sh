@@ -3,7 +3,7 @@
 # --------------------------------------------------
 # Monster Trading Cards Game
 # --------------------------------------------------
-token="eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczNDAzODU1MCwiZXhwIjoxNzM1NTU0Nzg5fQ.cEHJgGvsvLj3vSrIE2Kgtii07j9QkEZOkCE5KMTtfqs"
+token="eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInVzZXJJZCI6MSwiaWF0IjoxNzM2MDM3MTI3LCJleHAiOjE3Mzc1NTMzNjZ9.TKsu8ltgIbpg_ly2901G5fiMwa8Gw26HlX5RLykF3CM"
 pack1="./curlTests/packages/pack"
 
 echo "CURL Testing for Monster Trading Cards Game"
@@ -89,7 +89,7 @@ done
 #
 ## --------------------------------------------------
 #echo "4) acquire packages kienboec"
-#curl -i -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Bearer kienboec-mtcgToken" -d ""
+curl -i -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Bearer $token" -d ""
 #echo "Should return HTTP 201"
 #echo .
 #curl -i -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Bearer kienboec-mtcgToken" -d ""

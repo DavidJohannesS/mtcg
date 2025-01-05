@@ -23,8 +23,7 @@ public class RestHandler {
 
         } else if (request.startsWith("POST /transactions/packages"))
         {
-                //return packageController.sellPackage( requestBody, authHeader );
-                return responseService.createErrorResponse(418,teapot);
+                return packageController.buyPackage(authHeader);
 
         } else if (request.startsWith("GET /users")) {
             return responseService.createErrorResponse(418, teapot);

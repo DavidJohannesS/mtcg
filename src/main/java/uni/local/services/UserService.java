@@ -4,12 +4,10 @@ import org.mindrot.jbcrypt.BCrypt;
 import uni.local.models.User;
 import uni.local.repository.UserRepository;
 import uni.local.utils.JwtUtil;
-import uni.local.utils.TokenGenerator;
 
 import java.sql.SQLException;
 
-public class UserService
-{
+public class UserService {
     private static UserService instance;
     private final UserRepository userRepository;
 
@@ -17,23 +15,21 @@ public class UserService
         this.userRepository = new UserRepository();
     }
 
-    public static synchronized UserService getInstance()
-    {
+    public static synchronized UserService getInstance() {
         if (instance == null) {
             instance = new UserService();
         }
         return instance;
     }
 
-    public boolean registerUser(String username, String password)
-    {
+    public boolean registerUser(String username, String password) {
         try {
             if (userRepository.existsByUsername(username)) {
                 System.out.println("User already exists: " + username);
                 return false;
             }
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-            userRepository.save(new User(username, hashedPassword,20));
+            userRepository.save(new User(username, hashedPassword, 20));
             System.out.println("User registered: " + username);
             return true;
         } catch (SQLException e) {
@@ -42,12 +38,11 @@ public class UserService
         }
     }
 
-    public String loginUser(String username, String password)
-    {
+    public String loginUser(String username, String password) {
         try {
             User user = userRepository.findByUsername(username);
             if (user != null && BCrypt.checkpw(password, user.getPassword())) {
-                String token = JwtUtil.generateToken(username);
+                String token = JwtUtil.generateToken(username, user.getId());
                 System.out.println("User logged in: " + username);
                 return token;
             } else {
@@ -58,6 +53,10 @@ public class UserService
             e.printStackTrace();
             return null;
         }
+    }
+
+    public User getUserById(int userId) {
+        return userRepository.findById(userId);
     }
 }
 

@@ -349,11 +349,21 @@ curl -i -X PUT http://localhost:10001/deck --header "Content-Type: application/j
 ## --------------------------------------------------
 #echo "20) trade"
 #echo "check trading deals"
-#curl -i -X GET http://localhost:10001/tradings --header "Authorization: Bearer kienboec-mtcgToken"
+curl -i -X GET http://localhost:10001/tradings --header "Authorization: Bearer $token" 
 #echo "Should return HTTP 200 - and an empty list"
 #echo .
 #echo create trading deal
-#curl -i -X POST http://localhost:10001/tradings --header "Content-Type: application/json" --header "Authorization: Bearer kienboec-mtcgToken" -d "{\"Id\": \"6cd85277-4590-49d4-b0cf-ba0a921faad0\", \"CardToTrade\": \"1cb6ab86-bdb2-47e5-b6e4-68c5ab389334\", \"Type\": \"monster\", \"MinimumDamage\": 15}"
+#curl -i -X POST http://localhost:10001/tradings --header "Content-Type: application/json" --header "Authorization: Bearer $token" -d "{\"Id\": \"6cd85277-4590-49d4-b0cf-ba0a921faad0\", \"CardToTrade\": \"1cb6ab86-bdb2-47e5-b6e4-68c5ab389334\", \"Type\": \"monster\", \"MinimumDamage\": 15}"
+curl -i -X POST http://localhost:10001/tradings \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Bearer $token" \
+  -d '{
+        "id": "6cd85277-4590-49d4-b0cf-ba0a921faad0",
+        "cardToTrade": "1cb6ab86-bdb2-47e5-b6e4-68c5ab389334",
+        "type": "monster",
+        "minimumDamage": 15
+      }'
+
 #echo "Should return HTTP 201"
 #echo .
 #

@@ -6,13 +6,16 @@ uni/local/services/CardService.class
 uni/local/models/Card.class
 uni/local/repository/CardRepository.class
 uni/local/repository/UserRepository.class
+uni/local/repository/TradeRepository.class
 uni/local/services/UserService.class
 uni/local/utils/TokenGenerator.class
+uni/local/services/TradeService.class
 uni/local/utils/http/ResponseBuilder$ResponseBuilderBuilder.class
 uni/local/Server.class
 uni/local/repository/DeckRepository.class
 uni/local/models/Card$CardName.class
 uni/local/controllers/DeckController$1.class
+uni/local/controllers/TradeController.class
 uni/local/controllers/CardController.class
 uni/local/RestHandler.class
 uni/local/utils/http/ResponseService.class
@@ -20,6 +23,7 @@ uni/local/Main.class
 uni/local/services/PackageService.class
 uni/local/utils/http/ResponseBuilder.class
 uni/local/models/Deck.class
+uni/local/models/Trade.class
 uni/local/controllers/PackageController.class
 uni/local/controllers/DeckController.class
 uni/local/models/User.class

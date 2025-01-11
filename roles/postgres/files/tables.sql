@@ -2,6 +2,7 @@
 CREATE TABLE IF NOT EXISTS packages (
     id SERIAL PRIMARY KEY
 );
+
 -- Users Table
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
@@ -22,10 +23,9 @@ CREATE TABLE IF NOT EXISTS cards (
 -- Trades Table
 CREATE TABLE IF NOT EXISTS trades (
     id UUID PRIMARY KEY,
-    offered_card_id UUID REFERENCES cards(id),
-    required_card_type VARCHAR(50),
-    required_element_type VARCHAR(50),
-    min_damage INTEGER,
+    cardToTrade UUID REFERENCES cards(id),  -- Corrected column name
+    type VARCHAR(50),  -- Corrected column name
+    minimumDamage FLOAT,  -- Corrected column name
     owner_id INTEGER REFERENCES users(id)
 );
 
@@ -38,7 +38,9 @@ CREATE TABLE IF NOT EXISTS battles (
     log TEXT,
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-CREATE TABLE deck (
+
+-- Deck Table
+CREATE TABLE IF NOT EXISTS deck (
     user_id INT,
     card_id UUID,
     PRIMARY KEY (user_id, card_id)

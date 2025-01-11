@@ -64,11 +64,22 @@ public class CardRepository {
                 PreparedStatement pstmt = conn.prepareStatement(sql))
         {
             pstmt.setInt(1,userId);
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next())
             {
                 Card card = new Card();
-                card.setId(UUID.fromStr
+                card.setId(UUID.fromString(rs.getString("id")));
+                card.setName(Card.CardName.valueOf(rs.getString("name")));
+                card.setDamage(rs.getFloat("damage"));
+                card.setOwner_id(rs.getInt("owner_id"));
+                card.setPackage_id(rs.getInt("package_id"));
+                cards.add(card);
+            }
+        } catch (SQLException e)
+        { e.printStackTrace();
+        }
+        return cards;
+    }
 
 }
 

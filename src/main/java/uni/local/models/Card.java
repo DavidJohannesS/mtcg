@@ -23,5 +23,9 @@ public class Card {
         WaterSpell, FireSpell, RegularSpell,
         Knight, Dragon, Ork, Kraken, Wizzard
     }
+    public void setOwnerId(int owner_id)
+    {
+        this.owner_id=owner_id;
+    }
 }
 

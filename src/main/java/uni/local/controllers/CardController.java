@@ -1,5 +1,7 @@
 package uni.local.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import uni.local.models.Card;
 import uni.local.services.CardService;
 import uni.local.utils.JwtUtil;
@@ -10,6 +12,7 @@ import java.util.List;
 public class CardController {
     private final CardService cardService = CardService.getInstance();
     private final ResponseService responseService = new ResponseService();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public String getUserCards(String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -20,7 +23,13 @@ public class CardController {
         int userId = JwtUtil.extractUserId(token);
 
         List<Card> userCards = cardService.getUserCards(userId);
-        return responseService.createSuccessResponse(200, userCards);
+        try {
+            String jsonResponse = objectMapper.writeValueAsString(userCards);
+            return responseService.createSuccessResponse(200, jsonResponse);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return responseService.createErrorResponse(500, "Internal Server Error");
+        }
     }
 }
 

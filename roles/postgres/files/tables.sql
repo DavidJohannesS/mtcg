@@ -38,4 +38,9 @@ CREATE TABLE IF NOT EXISTS battles (
     log TEXT,
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE deck (
+    user_id INT,
+    card_id UUID,
+    PRIMARY KEY (user_id, card_id)
+);
 

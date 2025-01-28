@@ -94,7 +94,7 @@ public class CardRepository {
                 card.setId(UUID.fromString(rs.getString("id")));
                 card.setName(Card.CardName.valueOf(rs.getString("name")));
                 card.setDamage(rs.getFloat("damage"));
-                card.setOwnerId(rs.getInt("ownerId"));
+                card.setOwnerId(rs.getInt("owner_id"));
                 return card;
             }
         } catch (SQLException e) {

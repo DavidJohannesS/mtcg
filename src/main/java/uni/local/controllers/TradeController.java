@@ -7,7 +7,7 @@ import uni.local.models.Trade;
 import uni.local.services.TradeService;
 import uni.local.utils.JwtUtil;
 import uni.local.utils.http.ResponseService;
-
+import org.json.JSONObject;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -61,6 +61,7 @@ public class TradeController {
     }
 
     // POST /tradings/{id}
+
 public String acceptTradingDeal(String request, String requestBody, String authHeader) {
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
         return responseService.createErrorResponse(401, "Unauthorized");
@@ -69,12 +70,29 @@ public String acceptTradingDeal(String request, String requestBody, String authH
     int userId = JwtUtil.extractUserId(authHeader.substring(7));
 
     // Extract the trade ID from the URL
-    String tradeIdStr = request.substring(request.indexOf("/tradings/") + 10);
-    UUID tradeId = UUID.fromString(tradeIdStr);
+    String tradeIdStr = request.substring(request.indexOf("/tradings/") + 10).trim();
+    if (tradeIdStr.contains(" ")) {
+        tradeIdStr = tradeIdStr.split(" ")[0]; // Remove any trailing HTTP headers
+    }
+    
+    UUID tradeId;
+    try {
+        tradeId = UUID.fromString(tradeIdStr);
+    } catch (IllegalArgumentException e) {
+        return responseService.createErrorResponse(400, "Invalid Trade ID format");
+    }
 
     try {
-        // Since the request body contains just the offered card ID, we can parse it directly
-        String offeredCardIdStr = requestBody.replace("\"", "").trim();  // Remove quotes and whitespace
+        // Log the request body for debugging
+        System.out.println("Request Body: " + requestBody);
+
+        // Parse the request body as JSON
+        JSONObject jsonBody = new JSONObject(requestBody);
+        String offeredCardIdStr = jsonBody.getString("offeredCardId");
+
+        // Trim and remove any extraneous characters from the offered card ID
+        offeredCardIdStr = offeredCardIdStr.replace("\"", "").trim(); 
+
         UUID offeredCardId = UUID.fromString(offeredCardIdStr);
 
         boolean success = tradeService.acceptTrade(tradeId, offeredCardId, userId);
@@ -90,6 +108,7 @@ public String acceptTradingDeal(String request, String requestBody, String authH
         return responseService.createErrorResponse(500, "Internal Server Error");
     }
 }
+
 
 
 

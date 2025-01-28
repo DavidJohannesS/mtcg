@@ -33,6 +33,7 @@ public class TradeService {
 
     public boolean createTrade(Trade trade) {
         // Business logic validations
+        
         return tradeRepository.save(trade);
     }
 

@@ -10,7 +10,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Trade {
-    private UUID id;
+    private UUID id = UUID.randomUUID();
     private UUID cardToTrade;
     private String type;
     private Float minimumDamage;

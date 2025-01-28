@@ -56,10 +56,16 @@ public class RestHandler {
         } else if (request.startsWith("GET /tradings"))
         {
             return tradeController.getTradingDeals(authHeader);
-        } else if (request.startsWith("POST /tradings"))
+        }else if (request.startsWith("POST /tradings/"))
+        {
+            System.out.println("POPO");
+            return tradeController.acceptTradingDeal(request, requestBody, authHeader);
+        }
+         else if (request.startsWith("POST /tradings"))
         {
             return tradeController.createTradingDeal(requestBody, authHeader);
-        } else if (request.startsWith("DELETE /tradings"))
+        } 
+        else if (request.startsWith("DELETE /tradings"))
         {
             return tradeController.deleteTradingDeal(requestBody, authHeader);
         } 

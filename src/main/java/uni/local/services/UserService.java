@@ -11,16 +11,23 @@ public class UserService {
     private static UserService instance;
     private final UserRepository userRepository;
 
-    private UserService() {
-        this.userRepository = new UserRepository();
+    private UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public static synchronized UserService getInstance() {
         if (instance == null) {
-            instance = new UserService();
+            instance = new UserService(new UserRepository());
         }
         return instance;
     }
+ public void updateUser(User user) 
+ { 
+     userRepository.updateUser(user);
+ }
+ public void updateUserElo(User user) {
+    userRepository.updateUserElo(user.getId(), user.getElo());
+}
 
     public boolean registerUser(String username, String password) {
         try {
@@ -29,7 +36,7 @@ public class UserService {
                 return false;
             }
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-            userRepository.save(new User(username, hashedPassword, 20));
+            userRepository.save(new User(username, hashedPassword, 20, 0));
             System.out.println("User registered: " + username);
             return true;
         } catch (SQLException e) {
@@ -58,5 +65,18 @@ public class UserService {
     public User getUserById(int userId) {
         return userRepository.findById(userId);
     }
+public void deleteUserByUsername(String username) {
+    userRepository.deleteByUsername(username);
+}
+
+public User getUserByUsername(String username) {
+    try {
+        return userRepository.findByUsername(username);
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return null;
+    }
+}
+
 }
 

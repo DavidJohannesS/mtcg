@@ -40,23 +40,26 @@ public class UserRepository
         return false;
     }
 
-    public User findByUsername ( String username ) throws SQLException
-    {
+    public User findByUsername(String username) throws SQLException {
         String sql = "SELECT * FROM users WHERE username = ?";
-        try ( Connection conn = DbConnection.getInstance();
-              PreparedStatement pstmt = conn.prepareStatement( sql ) )
-        {
-            pstmt.setString( 1, username );
-            try ( ResultSet rs = pstmt.executeQuery() )
-            {
-                if ( rs.next() )
-                {
-                    return new User( rs.getString( "username" ), rs.getString( "password" ), rs.getInt( "coins" ) );
+        try (Connection conn = DbConnection.getInstance();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    int id = rs.getInt("id");
+                    String password = rs.getString("password");
+                    int coins = rs.getInt("coins");
+                    int elo = rs.getInt("elo");
+                    // Use the constructor that includes id
+                    return new User(id, username, password, coins, elo);
                 }
             }
         }
         return null;
     }
+
+
     public void updateUserCoins(int userId, int newCoinCount, Connection conn) throws SQLException
     {
         String sql = "UPDATE users SET coins = ? WHERE id = ?";
@@ -67,6 +70,25 @@ public class UserRepository
             pstmt.executeUpdate();
         }
     }
+
+    public void updateUser(User user) {
+        String sql = "UPDATE users SET username = ?, password = ?, coins = ?, elo = ? WHERE id = ?";
+        try (Connection conn = DbConnection.getInstance();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, user.getUsername());
+            pstmt.setString(2, user.getPassword());
+            pstmt.setInt(3, user.getCoins());
+            pstmt.setInt(4, user.getElo());
+            pstmt.setInt(5, user.getId());
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     public User findById(int userId) {
     String sql = "SELECT * FROM users WHERE id = ?";
     try (Connection conn = DbConnection.getInstance();
@@ -78,7 +100,8 @@ public class UserRepository
                 rs.getInt("id"), // Ensure the ID is set
                 rs.getString("username"),
                 rs.getString("password"),
-                rs.getInt("coins")
+                rs.getInt("coins"),
+                rs.getInt("elo")
             );
         }
     } catch (SQLException e) {
@@ -86,6 +109,29 @@ public class UserRepository
     }
     return null;
 }
+public void updateUserElo(int userId, int elo) {
+    String sql = "UPDATE users SET elo = ? WHERE id = ?";
+    try (Connection conn = DbConnection.getInstance();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setInt(1, elo);
+        pstmt.setInt(2, userId);
+        pstmt.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+public void deleteByUsername(String username) {
+    String sql = "DELETE FROM users WHERE username = ?";
+    try (Connection conn = DbConnection.getInstance();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setString(1, username);
+        pstmt.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
+
 
 }
 

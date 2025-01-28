@@ -7,6 +7,7 @@ import uni.local.utils.http.Constants;
 import uni.local.controllers.CardController;
 import uni.local.controllers.DeckController;
 import uni.local.controllers.TradeController;
+import uni.local.controllers.BattleController;
 public class RestHandler {
     private final UserController userController = new UserController();
     private final PackageController packageController = new PackageController();
@@ -15,10 +16,13 @@ public class RestHandler {
     private final CardController cardController = new CardController();
     private final DeckController deckController = new DeckController();
     private final TradeController tradeController = new TradeController();
+    private final BattleController battleController = new BattleController();
     public String handleRequest(String request, String requestBody, String authHeader) {
         if(request.startsWith("GET /cards"))
         {
             return cardController.getUserCards(authHeader);
+        } else if (request.startsWith("POST /battles")){
+            return battleController.requestBattle(authHeader);
         }
         else if (request.startsWith("POST /users")) {
             return userController.register(requestBody);
@@ -64,7 +68,11 @@ public class RestHandler {
         else if (request.startsWith("PUT /deck"))
         {
             return deckController.setDeck(requestBody, authHeader);
-        } else {
+        }else if (request.startsWith("POST /deck/random"))
+        {
+            return deckController.setRandomDeck(authHeader);
+        }
+        else {
             return responseService.createErrorResponse(Constants.STATUS_BAD_REQUEST, "Endpoint not found");
         }
 }

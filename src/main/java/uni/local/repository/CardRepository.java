@@ -71,8 +71,8 @@ public class CardRepository {
                 card.setId(UUID.fromString(rs.getString("id")));
                 card.setName(Card.CardName.valueOf(rs.getString("name")));
                 card.setDamage(rs.getFloat("damage"));
-                card.setOwner_id(rs.getInt("owner_id"));
-                card.setPackage_id(rs.getInt("package_id"));
+                card.setOwnerId(rs.getInt("owner_id"));
+                card.setPackageId(rs.getInt("package_id"));
                 cards.add(card);
             }
         } catch (SQLException e)
@@ -81,5 +81,58 @@ public class CardRepository {
         return cards;
     }
 
+
+
+    public Card findById(UUID cardId) {
+        String sql = "SELECT * FROM cards WHERE id = ?";
+        try (Connection conn = DbConnection.getInstance();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setObject(1, cardId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                Card card = new Card();
+                card.setId(UUID.fromString(rs.getString("id")));
+                card.setName(Card.CardName.valueOf(rs.getString("name")));
+                card.setDamage(rs.getFloat("damage"));
+                card.setOwnerId(rs.getInt("ownerId"));
+                return card;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean tradeCards(UUID cardIdUser, int userId, UUID cardIdOwner, int ownerId) {
+        String sqlUpdateCardUser = "UPDATE cards SET ownerId = ? WHERE id = ?";
+        String sqlUpdateCardOwner = "UPDATE cards SET ownerId = ? WHERE id = ?";
+        try (Connection conn = DbConnection.getInstance()) {
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement pstmtUser = conn.prepareStatement(sqlUpdateCardUser);
+                    PreparedStatement pstmtOwner = conn.prepareStatement(sqlUpdateCardOwner)) {
+
+                // Transfer user's card to owner
+                pstmtUser.setInt(1, ownerId);
+                pstmtUser.setObject(2, cardIdUser);
+                pstmtUser.executeUpdate();
+
+                // Transfer owner's card to user
+                pstmtOwner.setInt(1, userId);
+                pstmtOwner.setObject(2, cardIdOwner);
+                pstmtOwner.executeUpdate();
+
+                conn.commit();
+                return true;
+            } catch (SQLException e) {
+                conn.rollback();
+                e.printStackTrace();
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
 

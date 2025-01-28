@@ -51,9 +51,10 @@ public class PackageController {
         }
 
         String token = authHeader.substring(7);
+        System.out.println(authHeader);
         int userId = JwtUtil.extractUserId(token);
         User user = userService.getUserById(userId);
-
+        System.out.println(userId);
         if (user == null) {
             return responseService.createErrorResponse(404, "User not found");
         }

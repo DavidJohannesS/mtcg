@@ -58,5 +58,21 @@ public class DeckController {
             return responseService.createErrorResponse(500, "Internal Server Error");
         }
     }
+
+    public String setRandomDeck(String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return responseService.createErrorResponse(401, "Unauthorized");
+        }
+
+        String token = authHeader.substring(7);
+        int userId = JwtUtil.extractUserId(token);
+
+        boolean success = deckService.setRandomDeck(userId);
+        if (success) {
+            return responseService.createSuccessResponse(200, "Random deck set successfully");
+        } else {
+            return responseService.createErrorResponse(400, "Failed to set random deck");
+        }
+    }
 }
 

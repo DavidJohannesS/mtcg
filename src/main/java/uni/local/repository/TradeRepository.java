@@ -2,7 +2,6 @@ package uni.local.repository;
 
 import uni.local.models.Trade;
 import uni.local.utils.DbConnection;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +19,26 @@ public class TradeRepository {
         return instance;
     }
 
+public Trade findById(UUID tradeId) {
+    String sql = "SELECT * FROM trades WHERE id = ?";
+    try (Connection conn = DbConnection.getInstance();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setObject(1, tradeId);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            Trade trade = new Trade();
+            trade.setId(UUID.fromString(rs.getString("id")));
+            trade.setCardToTrade(UUID.fromString(rs.getString("CardToTrade")));  // Matches JSON key
+            trade.setType(rs.getString("Type"));  // Matches JSON key
+            trade.setMinimumDamage(rs.getFloat("MinimumDamage"));  // Matches JSON key
+            trade.setOwnerId(rs.getInt("owner_id"));
+            return trade;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
     public List<Trade> findAll() {
         String sql = "SELECT * FROM trades";
         List<Trade> trades = new ArrayList<>();
@@ -58,18 +77,18 @@ public class TradeRepository {
         }
     }
 
-    public boolean delete(UUID tradeId, int userId) {
-        String sql = "DELETE FROM trades WHERE id = ? AND owner_id = ?";
-        try (Connection conn = DbConnection.getInstance();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setObject(1, tradeId);
-            pstmt.setInt(2, userId);
-            int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+public boolean delete(UUID tradeId) {
+    String sql = "DELETE FROM trades WHERE id = ?";
+    try (Connection conn = DbConnection.getInstance();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setObject(1, tradeId);
+        int rowsAffected = pstmt.executeUpdate();
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
     }
+}
+
 }
 

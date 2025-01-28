@@ -44,6 +44,19 @@ public class DeckRepository {
         return cards;
     }
 
+public boolean isCardInDeck(int userId, UUID cardId) {
+    String sql = "SELECT 1 FROM deck WHERE user_id = ? AND card_id = ?";
+    try (Connection conn = DbConnection.getInstance();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setInt(1, userId);
+        pstmt.setObject(2, cardId);
+        ResultSet rs = pstmt.executeQuery();
+        return rs.next();
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
     public boolean updateDeck(int userId, List<UUID> cardIds) {
         String deleteDeckSql = "DELETE FROM deck WHERE user_id = ?";
         String insertDeckSql = "INSERT INTO deck (user_id, card_id) VALUES (?, ?)";

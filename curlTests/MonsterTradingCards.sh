@@ -5,7 +5,7 @@
 # --------------------------------------------------
 token="eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInVzZXJJZCI6MSwiaWF0IjoxNzM2MDM3MTI3LCJleHAiOjE3Mzc1NTMzNjZ9.TKsu8ltgIbpg_ly2901G5fiMwa8Gw26HlX5RLykF3CM"
 pack1="./curlTests/packages/pack"
-
+token1="eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHRlbmhvZiIsInVzZXJJZCI6MywiaWF0IjoxNzM2NjQ3OTg1LCJleHAiOjE3MzgxNjQyMjR9.RaDueYMYtMs5xXy3-xbtIv-wTh8pawCc-KmNThvQlkQ"
 echo "CURL Testing for Monster Trading Cards Game"
 
 echo " Be sure to run the script from repo root"
@@ -91,6 +91,7 @@ done
 #echo "4) acquire packages kienboec"
 curl -i -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Bearer $token" -d ""
 #echo "Should return HTTP 201"
+curl -i -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Bearer $token1" -d ""
 #echo .
 #curl -i -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Bearer kienboec-mtcgToken" -d ""
 #echo "Should return HTTP 201"
@@ -191,7 +192,7 @@ curl -i -X GET http://localhost:10001/deck --header "Authorization: Bearer $toke
 #
 ## --------------------------------------------------
 #echo "11) configure deck"
-curl -i -X PUT http://localhost:10001/deck --header "Content-Type: application/json" --header "Authorization: Bearer $token " -d "[\"845f0dc7-37d0-426e-994e-43fc3ac83c08\", \"99f8f8dc-e25e-4a95-aa2c-782823f36e2a\", \"e85e3976-7c86-4d06-9a80-641c2019a79f\", \"171f6076-4eb5-4a7d-b3f2-2d650cc3d237\"]"
+#curl -i -X PUT http://localhost:10001/deck --header "Content-Type: application/json" --header "Authorization: Bearer $token " -d "[\"845f0dc7-37d0-426e-994e-43fc3ac83c08\", \"99f8f8dc-e25e-4a95-aa2c-782823f36e2a\", \"e85e3976-7c86-4d06-9a80-641c2019a79f\", \"171f6076-4eb5-4a7d-b3f2-2d650cc3d237\"]"
 #echo "Should return HTTP 2xx"
 #echo .
 #curl -i -X GET http://localhost:10001/deck --header "Authorization: Bearer kienboec-mtcgToken"
@@ -317,8 +318,8 @@ curl -i -X PUT http://localhost:10001/deck --header "Content-Type: application/j
 #
 ## --------------------------------------------------
 #echo "17) battle"
-#curl -i -X POST http://localhost:10001/battles --header "Authorization: Bearer kienboec-mtcgToken" &
-#curl -i -X POST http://localhost:10001/battles --header "Authorization: Bearer altenhof-mtcgToken" &
+curl -i -X POST http://localhost:10001/battles --header "Authorization: Bearer kienboec-mtcgToken" &
+curl -i -X POST http://localhost:10001/battles --header "Authorization: Bearer altenhof-mtcgToken" &
 #wait
 #
 #if [ -z $pauseFlag ]; then read -p "Press enter to continue..." temp;fi
@@ -392,7 +393,8 @@ curl -i -X POST http://localhost:10001/tradings \
 #curl -i -X GET http://localhost:10001/tradings  --header "Authorization: Bearer kienboec-mtcgToken"
 #echo "Should return HTTP 200 ..."
 #echo .
-#curl -i -X POST http://localhost:10001/tradings --header "Content-Type: application/json" --header "Authorization: Bearer kienboec-mtcgToken" -d "{\"Id\": \"6cd85277-4590-49d4-b0cf-ba0a921faad0\", \"CardToTrade\": \"1cb6ab86-bdb2-47e5-b6e4-68c5ab389334\", \"Type\": \"monster\", \"MinimumDamage\": 15}"
+curl -i -X POST http://localhost:10001/tradings --header "Content-Type: application/json" --header "Authorization: Bearer $token" -d "{\"id\": \"6cd85277-4590-49d4-b0cf-ba0a921faad0\", \"cardToTrade\": \"1cb6ab86-bdb2-47e5-b6e4-68c5ab389334\", \"type\": \"monster\", \"minimumDamage\": 15}"
+curl -i -X POST http://localhost:10001/tradings --header "Content-Type: application/json" --header "Authorization: Bearer $token1" -d "{\"id\": \"6cd85277-4590-49d4-b0cf-ba0a921faad0\", \"cardToTrade\": \"1cb6ab86-bdb2-47e5-b6e4-68c5ab389334\", \"type\": \"monster\", \"minimumDamage\": 15}"
 #echo "Should return HTTP 201"
 #echo check trading deals
 #curl -i -X GET http://localhost:10001/tradings  --header "Authorization: Bearer kienboec-mtcgToken"
@@ -404,8 +406,17 @@ curl -i -X POST http://localhost:10001/tradings \
 #
 #if [ -z $pauseFlag ]; then read -p "Press enter to continue..." temp;fi
 #
-#echo "try to trade with yourself (should fail)"
-#curl -i -X POST http://localhost:10001/tradings/6cd85277-4590-49d4-b0cf-ba0a921faad0 --header "Content-Type: application/json" --header "Authorization: Bearer kienboec-mtcgToken" -d "\"4ec8b269-0dfa-4f97-809a-2c63fe2a0025\""
+echo "try to trade with yourself (should fail)"
+curl -i -X POST http://localhost:10001/tradings/6cd85277-4590-49d4-b0cf-ba0a921faad0 \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Bearer $token" \
+  -d '{"offeredCardId": "4ec8b269-0dfa-4f97-809a-2c63fe2a0025"}'
+
+curl -i -X POST http://localhost:10001/tradings/6cd85277-4590-49d4-b0cf-ba0a921faad0 \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Bearer $token1" \
+  -d '{"offeredCardId": "951e886a-0fbf-425d-8df5-af2ee4830d85"}'
+#curl -i -X POST http://localhost:10001/tradings/6cd85277-4590-49d4-b0cf-ba0a921faad0 --header "Content-Type: application/json" --header "Authorization: Bearer $token" -d "\"4ec8b269-0dfa-4f97-809a-2c63fe2a0025\""
 #echo "Should return HTTP 4xx"
 #echo .
 #
@@ -413,7 +424,7 @@ curl -i -X POST http://localhost:10001/tradings \
 #
 #echo "try to trade"
 #echo .
-#curl -i -X POST http://localhost:10001/tradings/6cd85277-4590-49d4-b0cf-ba0a921faad0 --header "Content-Type: application/json" --header "Authorization: Bearer altenhof-mtcgToken" -d "\"951e886a-0fbf-425d-8df5-af2ee4830d85\""
+#curl -i -X POST http://localhost:10001/tradings/6cd85277-4590-49d4-b0cf-ba0a921faad0 --header "Content-Type: application/json" --header "Authorization: Bearer $token1" -d "\"951e886a-0fbf-425d-8df5-af2ee4830d85\""
 #echo "Should return HTTP 201 ..."
 #echo .
 #curl -i -X GET http://localhost:10001/tradings --header "Authorization: Bearer kienboec-mtcgToken"

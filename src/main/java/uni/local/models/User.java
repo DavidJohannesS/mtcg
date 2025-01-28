@@ -15,11 +15,14 @@ public class User
     private  String username;
     private  String password;
     private int coins;
-    public User ( String username, String password, int coins)
+    private int elo;
+    public User ( String username, String password, int coins,int elo)
     {
         this.username = username;
         this.password = password;
         this.coins = coins;
+        this.elo = elo;
     }
+
 }
 

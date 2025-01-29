@@ -24,7 +24,7 @@ sudo dnf install -y python3-psycopg2
 ```
 
 Role Variables
---------------
+-------------
 
 image name, version as well db user,pwd and db name are set in var/main.yml
 
@@ -44,7 +44,7 @@ ansible-playbook db.yaml --tags "utils,reset"
 
 # Full purge (container,volume,img deleted)
 
-ansible-playbook db.yaml --tags"utils,reset,purge"
+ansible-playbook db.yaml --tags"utils,reset"
 
 # Setup db tables
 

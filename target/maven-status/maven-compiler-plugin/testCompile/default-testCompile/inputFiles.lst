@@ -1,5 +1,6 @@
 /gitrepos/uni/courses/java/mtcg.git/meow/src/test/java/uni/local/AppTest.java
-/gitrepos/uni/courses/java/mtcg.git/meow/src/test/java/uni/local/PackageServiceTest.java
 /gitrepos/uni/courses/java/mtcg.git/meow/src/test/java/uni/local/DeckServiceTest.java
+/gitrepos/uni/courses/java/mtcg.git/meow/src/test/java/uni/local/PackageServiceTest.java
+/gitrepos/uni/courses/java/mtcg.git/meow/src/test/java/uni/local/TradeServiceTest.java
 /gitrepos/uni/courses/java/mtcg.git/meow/src/test/java/uni/local/UserServiceTest.java
 /gitrepos/uni/courses/java/mtcg.git/meow/src/test/java/uni/local/CardServiceTest.java

@@ -74,83 +74,83 @@ curl -i -X GET http://localhost:10001/cards --header "Authorization: Bearer $TOK
 curl -i -X GET http://localhost:10001/tradings --header "Authorization: Bearer $TOKEN_ADMIN"
 #
 #
-## Fetch and display the list of cards for the admin user to select from
-#echo "Fetching list of cards for admin..."
-#cards_admin_response=$(curl -s -X GET http://localhost:10001/cards \
-#  --header "Authorization: Bearer $TOKEN_ADMIN")
-#echo "Response: $cards_admin_response"
-#
-## Extract the 'message' field content
-#cards_admin_message=$(echo "$cards_admin_response" | sed 's/^.*"message":"\(.*\)"}$/\1/')
-#
-## Replace escaped quotes with actual quotes
-#cards_admin_message=$(echo "$cards_admin_message" | sed 's/\\"/"/g')
-#
-## Remove leading and trailing square brackets
-#cards_admin_message=$(echo "$cards_admin_message" | sed 's/^\[\(.*\)\]$/\1/')
-#
-## Split the cards into individual entries based on '},{'
-#cards_admin_message=$(echo "$cards_admin_message" | sed 's/},{/}\n{/g')
-#
-## Initialize arrays to hold card IDs and names
-#declare -a admin_card_ids
-#declare -a admin_card_names
-#
-#echo "Select a card to trade from admin's cards:"
-#
-#index=1
-#while read -r card_json; do
-#  # Extract 'id' field
-#  id=$(echo "$card_json" | grep -o '"id":"[^"]*"' | cut -d':' -f2 | tr -d '"')
-#  # Extract 'name' field
-#  name=$(echo "$card_json" | grep -o '"name":"[^"]*"' | cut -d':' -f2 | tr -d '"')
-#
-#  if [[ -n "$id" && -n "$name" ]]; then
-#    admin_card_ids+=("$id")
-#    admin_card_names+=("$name")
-#    echo "$index) $name (ID: $id)"
-#    ((index++))
-#  fi
-#done <<< "$cards_admin_message"
-#
-## Check if any cards were found
-#if [ "${#admin_card_ids[@]}" -eq 0 ]; then
-#  echo "No cards found. Exiting..."
-#  exit 1
-#fi
-#
-## Prompt the admin to select a card
-#read -p "Enter the number of the card admin wants to trade: " card_choice_admin
-#if ! [[ "$card_choice_admin" =~ ^[0-9]+$ ]] || [ "$card_choice_admin" -lt 1 ] || [ "$card_choice_admin" -gt "${#admin_card_ids[@]}" ]]; then
-#  echo "Invalid selection. Exiting..."
-#  exit 1
-#fi
-#
-#selected_card_admin="${admin_card_ids[$((card_choice_admin-1))]}"
-#
-## Create a trade using the selected card
-#read -p "Enter the desired type for the trade (monster/spell): " type
-#read -p "Enter the minimum damage for the trade: " minimum_damage
-#
-#if [[ "$type" != "monster" && "$type" != "spell" ]]; then
-#  echo "Invalid type. Type must be 'monster' or 'spell'. Exiting..."
-#  exit 1
-#fi
-#
-#if ! [[ "$minimum_damage" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
-#  echo "Invalid minimum damage. Please enter a positive number. Exiting..."
-#  exit 1
-#fi
-#
-#echo "Creating trade..."
-#curl -i -X POST http://localhost:10001/tradings \
-#  --header "Content-Type: application/json" \
-#  --header "Authorization: Bearer $TOKEN_ADMIN" \
-#  -d "{
-#        \"cardToTrade\": \"$selected_card_admin\",
-#        \"type\": \"$type\",
-#        \"minimumDamage\": $minimum_damage
-#      }"
+# Fetch and display the list of cards for the admin user to select from
+echo "Fetching list of cards for admin..."
+cards_admin_response=$(curl -s -X GET http://localhost:10001/cards \
+  --header "Authorization: Bearer $TOKEN_ADMIN")
+echo "Response: $cards_admin_response"
+
+# Extract the 'message' field content
+cards_admin_message=$(echo "$cards_admin_response" | sed 's/^.*"message":"\(.*\)"}$/\1/')
+
+# Replace escaped quotes with actual quotes
+cards_admin_message=$(echo "$cards_admin_message" | sed 's/\\"/"/g')
+
+# Remove leading and trailing square brackets
+cards_admin_message=$(echo "$cards_admin_message" | sed 's/^\[\(.*\)\]$/\1/')
+
+# Split the cards into individual entries based on '},{'
+cards_admin_message=$(echo "$cards_admin_message" | sed 's/},{/}\n{/g')
+
+# Initialize arrays to hold card IDs and names
+declare -a admin_card_ids
+declare -a admin_card_names
+
+echo "Select a card to trade from admin's cards:"
+
+index=1
+while read -r card_json; do
+  # Extract 'id' field
+  id=$(echo "$card_json" | grep -o '"id":"[^"]*"' | cut -d':' -f2 | tr -d '"')
+  # Extract 'name' field
+  name=$(echo "$card_json" | grep -o '"name":"[^"]*"' | cut -d':' -f2 | tr -d '"')
+
+  if [[ -n "$id" && -n "$name" ]]; then
+    admin_card_ids+=("$id")
+    admin_card_names+=("$name")
+    echo "$index) $name (ID: $id)"
+    ((index++))
+  fi
+done <<< "$cards_admin_message"
+
+# Check if any cards were found
+if [ "${#admin_card_ids[@]}" -eq 0 ]; then
+  echo "No cards found. Exiting..."
+  exit 1
+fi
+
+# Prompt the admin to select a card
+read -p "Enter the number of the card admin wants to trade: " card_choice_admin
+if ! [[ "$card_choice_admin" =~ ^[0-9]+$ ]] || [ "$card_choice_admin" -lt 1 ] || [ "$card_choice_admin" -gt "${#admin_card_ids[@]}" ]]; then
+  echo "Invalid selection. Exiting..."
+  exit 1
+fi
+
+selected_card_admin="${admin_card_ids[$((card_choice_admin-1))]}"
+
+# Create a trade using the selected card
+read -p "Enter the desired type for the trade (monster/spell): " type
+read -p "Enter the minimum damage for the trade: " minimum_damage
+
+if [[ "$type" != "monster" && "$type" != "spell" ]]; then
+  echo "Invalid type. Type must be 'monster' or 'spell'. Exiting..."
+  exit 1
+fi
+
+if ! [[ "$minimum_damage" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+  echo "Invalid minimum damage. Please enter a positive number. Exiting..."
+  exit 1
+fi
+
+echo "Creating trade..."
+curl -i -X POST http://localhost:10001/tradings \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Bearer $TOKEN_ADMIN" \
+  -d "{
+        \"cardToTrade\": \"$selected_card_admin\",
+        \"type\": \"$type\",
+        \"minimumDamage\": $minimum_damage
+      }"
 
 
 # Fetch and display the list of trades

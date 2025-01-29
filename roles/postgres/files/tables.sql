@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS cards (
     name VARCHAR(255) NOT NULL,
     damage FLOAT NOT NULL,
     package_id INTEGER REFERENCES packages(id),
-    owner_id INTEGER REFERENCES users(id)
+    owner_id INTEGER REFERENCES users(id),
+    is_in_deck BOOLEAN
 );
 
 -- Trades Table

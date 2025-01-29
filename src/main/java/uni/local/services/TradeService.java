@@ -32,10 +32,19 @@ public class TradeService {
     }
 
     public boolean createTrade(Trade trade) {
-        // Business logic validations
-        
-        return tradeRepository.save(trade);
+    // Fetch the card to be traded
+    Card cardToTrade = cardRepository.findById(trade.getCardToTrade());
+    if (cardToTrade == null) {
+        throw new IllegalArgumentException("Card to trade not found");
     }
+    // Check if the card is in a deck
+    if (cardToTrade.isInDeck()) {
+        throw new IllegalArgumentException("Cannot create a trade with a card that is in a deck");
+    }
+    // Business logic validations
+    return tradeRepository.save(trade);
+}
+
 
     public boolean deleteTrade(UUID tradeId) {
         return tradeRepository.delete(tradeId);
@@ -59,8 +68,8 @@ public boolean acceptTrade(UUID tradeId, UUID offeredCardId, int userId) {
         throw new IllegalArgumentException("You do not own the offered card");
     }
 
-    // Check if the offered card is in the user's deck
-    if (deckRepository.isCardInDeck(userId, offeredCardId)) {
+    // Check if the offered card is in a deck
+    if (userCard.isInDeck()) {
         throw new IllegalArgumentException("Cannot trade a card that is in your deck");
     }
 
@@ -82,6 +91,11 @@ public boolean acceptTrade(UUID tradeId, UUID offeredCardId, int userId) {
         throw new IllegalArgumentException("Owner's card not found");
     }
 
+    // Ensure the owner's card is not in a deck
+    if (ownerCard.isInDeck()) {
+        throw new IllegalArgumentException("Cannot trade a card that is in a deck");
+    }
+
     // Perform the trade: swap ownership of the cards
     boolean tradeSuccessful = cardRepository.tradeCards(
             offeredCardId, userId,
@@ -96,6 +110,7 @@ public boolean acceptTrade(UUID tradeId, UUID offeredCardId, int userId) {
         return false;
     }
 }
+
 
 // Utility method to determine card type from card name
 private String determineCardType(String cardName) {

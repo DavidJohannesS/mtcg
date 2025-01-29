@@ -25,7 +25,6 @@ public class DeckService {
         this.deckRepository = deckRepository;
         this.cardRepository = cardRepository;
     }
-
     public static synchronized DeckService getInstance() {
         if (instance == null) {
             instance = new DeckService();
@@ -33,29 +32,44 @@ public class DeckService {
         return instance;
     }
 
+    //----------------------------
+    //-                                                        ---- GET DECK
     public List<Card> getDeck(int userId) {
         return deckRepository.findDeckByUserId(userId);
     }
-
-    public boolean setDeck(int userId, List<String> cardIds) {
-        if (cardIds.size() != 4) {
-            throw new IllegalArgumentException("A deck must contain exactly 4 cards.");
-        }
-        List<UUID> cardUUIDs = cardIds.stream().map(UUID::fromString).collect(Collectors.toList());
-        return deckRepository.updateDeck(userId, cardUUIDs);
+//----------------------                                      
+//                                                           ----- SET SPECIFIC DECK
+public boolean setDeck(int userId, List<String> cardIds) {
+    if (cardIds.size() != 4) {
+        throw new IllegalArgumentException("A deck must contain exactly 4 cards.");
     }
-
-    public boolean setRandomDeck(int userId) {
-        List<Card> userCards = cardRepository.findByUserId(userId);
-        if (userCards.size() < 4) {
-            throw new IllegalArgumentException("User does not have enough cards to form a deck.");
-        }
-        Collections.shuffle(userCards);
-        List<UUID> randomCardIds = userCards.stream()
-                .limit(4)
-                .map(Card::getId)
-                .collect(Collectors.toList());
-        return deckRepository.updateDeck(userId, randomCardIds);
+    List<UUID> cardUUIDs = cardIds.stream().map(UUID::fromString).collect(Collectors.toList());
+    boolean success = deckRepository.updateDeck(userId, cardUUIDs);
+    if (success) {
+        cardUUIDs.forEach(cardUUID -> cardRepository.updateCardInDeckStatus(cardUUID, true));
     }
+    return success;
+}
+
+//-----------------------
+//                                                  SET DECK WITH RANDOM CARDS (OWNED)
+public boolean setRandomDeck(int userId) {
+    List<Card> userCards = cardRepository.findByUserId(userId);
+    if (userCards.size() < 4) {
+        throw new IllegalArgumentException("User does not have enough cards to form a deck.");
+    }
+    Collections.shuffle(userCards);
+    List<UUID> randomCardIds = userCards.stream()
+            .limit(4)
+            .map(Card::getId)
+            .collect(Collectors.toList());
+    boolean success = deckRepository.updateDeck(userId, randomCardIds);
+    if (success) {
+        randomCardIds.forEach(cardUUID -> cardRepository.updateCardInDeckStatus(cardUUID, true));
+    }
+    return success;
+}
+
+    //-----------
 }
 

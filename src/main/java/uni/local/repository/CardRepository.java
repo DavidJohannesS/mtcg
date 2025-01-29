@@ -102,37 +102,48 @@ public class CardRepository {
         }
         return null;
     }
+public boolean tradeCards(UUID tradingCardId, int userId, UUID offeredCardId, int ownerId) {
+    String sqlUpdateTradingCard = "UPDATE cards SET owner_id = ? WHERE id = ?";
+    String sqlUpdateOfferedCard = "UPDATE cards SET owner_id = ? WHERE id = ?";
+    try (Connection conn = DbConnection.getInstance()) {
+        conn.setAutoCommit(false);
 
-    public boolean tradeCards(UUID cardIdUser, int userId, UUID cardIdOwner, int ownerId) {
-        String sqlUpdateCardUser = "UPDATE cards SET ownerId = ? WHERE id = ?";
-        String sqlUpdateCardOwner = "UPDATE cards SET ownerId = ? WHERE id = ?";
-        try (Connection conn = DbConnection.getInstance()) {
-            conn.setAutoCommit(false);
+        try (PreparedStatement pstmtTradingCard = conn.prepareStatement(sqlUpdateTradingCard);
+             PreparedStatement pstmtOfferedCard = conn.prepareStatement(sqlUpdateOfferedCard)) {
 
-            try (PreparedStatement pstmtUser = conn.prepareStatement(sqlUpdateCardUser);
-                    PreparedStatement pstmtOwner = conn.prepareStatement(sqlUpdateCardOwner)) {
+            // Transfer user's card (tradingCardId) to owner
+            pstmtTradingCard.setInt(1, ownerId);
+            pstmtTradingCard.setObject(2, tradingCardId);
+            pstmtTradingCard.executeUpdate();
 
-                // Transfer user's card to owner
-                pstmtUser.setInt(1, ownerId);
-                pstmtUser.setObject(2, cardIdUser);
-                pstmtUser.executeUpdate();
+            // Transfer owner's card (offeredCardId) to user
+            pstmtOfferedCard.setInt(1, userId);
+            pstmtOfferedCard.setObject(2, offeredCardId);
+            pstmtOfferedCard.executeUpdate();
 
-                // Transfer owner's card to user
-                pstmtOwner.setInt(1, userId);
-                pstmtOwner.setObject(2, cardIdOwner);
-                pstmtOwner.executeUpdate();
-
-                conn.commit();
-                return true;
-            } catch (SQLException e) {
-                conn.rollback();
-                e.printStackTrace();
-                return false;
-            }
+            conn.commit();
+            return true;
         } catch (SQLException e) {
+            conn.rollback();
             e.printStackTrace();
             return false;
         }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
     }
+}
+    public void updateCardInDeckStatus(UUID cardId, boolean isInDeck) {
+    String sql = "UPDATE cards SET is_in_deck = ? WHERE id = ?";
+    try (Connection conn = DbConnection.getInstance();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setBoolean(1, isInDeck);
+        pstmt.setObject(2, cardId);
+        pstmt.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
 }
 

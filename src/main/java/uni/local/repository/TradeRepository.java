@@ -78,6 +78,11 @@ public Trade findById(UUID tradeId) {
     }
 
 public boolean delete(UUID tradeId) {
+    // First, check if the trade exists
+    if (findById(tradeId) == null) {
+        return false; // Trade doesn't exist, nothing to delete
+    }
+
     String sql = "DELETE FROM trades WHERE id = ?";
     try (Connection conn = DbConnection.getInstance();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {

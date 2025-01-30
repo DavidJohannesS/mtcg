@@ -24,6 +24,9 @@ public class RestHandler {
         } else if (request.startsWith("POST /battles")){
             return battleController.requestBattle(authHeader);
         }
+        else if (request.startsWith("GET /battles")){
+            return battleController.retrieveBattleResult(authHeader);
+        }
         else if (request.startsWith("POST /users")) {
             return userController.register(requestBody);
 

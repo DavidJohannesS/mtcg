@@ -35,17 +35,15 @@ public class BattleManager {
             if (playerA != null && playerB != null) {
                 System.out.println("Initiating battle between " + playerA.getUsername() + " and " + playerB.getUsername());
                 Battle battle = new Battle(playerA, playerB);
-                String battleLog = battle.start(); // Modify start() to return battle log
-
+                String battleLog = battle.start(); 
                 // Store battle results for both players
                 battleResults.put(playerA.getId(), battleLog);
                 battleResults.put(playerB.getId(), battleLog);
             }
         }
     }
-
-    public String getBattleResult(int userId) {
-        return battleResults.remove(userId); // Remove after retrieving
+public String getBattleResult(int userId) {
+        return battleResults.get(userId); 
     }
 }
 

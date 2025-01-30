@@ -56,7 +56,8 @@ display_menu() {
     echo "8) Create Trade"
     echo "9) Fetch and Display Trades"
     echo "10) Accept Trade"
-    echo "11) Exit"
+    echo "11) Fetch battle stats"
+    echo "12) Exit"
     echo "------------------------"
     echo -n "Enter your choice: "
     read -r choice
@@ -256,7 +257,15 @@ accept_trade() {
     echo "Trade accepted. Press Enter to continue..."
     read -r
 }
-
+get_battlestats()
+{
+select_user
+response=$(curl -s -X GET http://localhost:10001/battles \
+    --header "Authorization: Bearer $user_token")
+echo "$response"
+echo "Press enter to continue..."
+read -r 
+}
 # --- Initialize Users and Tokens ---
 create_and_get_tokens
 
@@ -275,7 +284,8 @@ while true; do
         8) create_trade ;;
         9) fetch_trades ;;
         10) accept_trade ;;
-        11) echo "Exiting..." && exit 0 ;;
+        11) get_battlestats ;;
+        12) echo "Exiting..." && exit 0 ;;
         *) echo "Invalid choice! Press Enter to continue..."
            read -r ;;
     esac

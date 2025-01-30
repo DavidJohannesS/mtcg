@@ -5,6 +5,7 @@ import uni.local.models.User;
 import uni.local.services.UserService;
 import uni.local.utils.JwtUtil;
 import uni.local.utils.http.ResponseService;
+
 public class BattleController {
     private final ResponseService responseService = new ResponseService();
     private final UserService userService = UserService.getInstance();

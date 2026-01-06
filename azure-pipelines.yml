@@ -15,7 +15,7 @@ steps:
     mavenPomFile: 'pom.xml'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'Path'
-    jdkDirectory: '/usr/lib/jvm/temurin-21-jdk-amd64'
+    jdkDirectory: '/usr/lib/jvm/java-21-openjdk-amd64'
 
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true

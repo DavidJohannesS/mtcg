@@ -15,7 +15,7 @@ steps:
     mavenPomFile: 'pom.xml'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'Path'
-    jdkDirectory: '/usr/lib/jvm/java-21-openjdk-amd64'
+    jdkDirectory: '/home/david/.sdkman/candidates/java/8.9.472-tem'
 
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true

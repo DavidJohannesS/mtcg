@@ -7,7 +7,7 @@ trigger:
 - meow
 
 pool:
-  vmImage: ubuntu-latest
+  name: 'Meow-hosted'
 
 steps:
 - task: Maven@3

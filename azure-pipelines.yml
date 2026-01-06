@@ -7,7 +7,7 @@ trigger:
 - meow
 
 pool:
-  name: 'Default'
+  name: 'Meow-hosted'
 
 steps:
 - task: Maven@3

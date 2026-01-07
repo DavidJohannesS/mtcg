@@ -10,6 +10,10 @@ pool:
   name: 'Meow-hosted'
 
 steps:
+- script: |
+    sed -i "s|\${AZURE_ARTIFACTS_PAT}|$(TOKEN)|g" settings.xml
+  displayName: "Inject PAT into settings.xml"
+
 - task: Maven@3
   env:
     DB_URL: $(DB_URL)

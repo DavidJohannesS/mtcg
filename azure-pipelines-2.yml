@@ -45,9 +45,11 @@ jobs:
 
               echo "Downloading JAR from Azure Artifacts..."
               mvn dependency:get \
+                -DrepoId=meow-registry \
                 -DrepoUrl=https://pkgs.dev.azure.com/if21b153z/aa8fe752-cc5f-47d5-aa3b-b6dd1cfbb188/_packaging/meow-registry/maven/v1 \
                 -Dartifact=uni.local:mtcg:1.0-SNAPSHOT \
                 -Dtransitive=false
+
 
               cp ~/.m2/repository/uni/local/mtcg/1.0-SNAPSHOT/mtcg-1.0-SNAPSHOT.jar .
 

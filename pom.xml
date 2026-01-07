@@ -145,4 +145,10 @@
             </plugin>
     </plugins>
 </build>
+<distributionManagement>
+    <repository>
+        <id>meow-registry</id>
+        <url>https://pkgs.dev.azure.com/if21b153z/aa8fe752-cc5f-47d5-aa3b-b6dd1cfbb188/_packaging/meow-registry/maven/v1</url>
+    </repository>
+</distributionManagement>
 </project>

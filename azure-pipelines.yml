@@ -27,7 +27,9 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
-- task: PublishBuildArtifacts@1
+
+- task: Maven@3
   inputs:
-    pathToPublish: 'target'
-    artifactName: 'drop'
+    mavenPomFile: 'pom.xml'
+    goals: 'deploy'
+    options: '--settings settings.xml'

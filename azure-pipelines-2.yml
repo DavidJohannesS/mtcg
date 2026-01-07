@@ -55,6 +55,7 @@ jobs:
             sshEndpoint: 'vm'
             runOptions: 'inline'
             inline: |
+              set +e
               cd ~/deploy
 
               cat > Dockerfile <<EOF
@@ -71,7 +72,8 @@ jobs:
           inputs:
             sshEndpoint: 'vm'
             runOptions: 'inline'
-            inline: |
+            inline: | 
+              set +e
               cd ~/deploy
 
               sudo docker rm -f mtcg-postgres 2>/dev/null || true

@@ -84,7 +84,7 @@ jobs:
                 -e POSTGRES_DB=$(PG_DB) \
                 -v pgdata:/var/lib/postgresql/data \
                 -p 5432:5432 \
-                postgres:17 2>/dev/null
+                postgres:17 
 
               sudo docker rm -f mtcg-container 2>/dev/null || true
               sudo docker run -d \
@@ -96,4 +96,4 @@ jobs:
                 -e DB_USER=$(DB_USER) \
                 -e DB_PASSWORD=$(DB_PASSWORD) \
                 -e DB_NAME=$(PG_DB) \
-                mtcg-app 2>/dev/null
+                mtcg-app 

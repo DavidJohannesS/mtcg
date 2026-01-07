@@ -1,6 +1,6 @@
 /home/david/gitrepos/mtcg/src/main/java/uni/local/services/DeckService.java
-/home/david/gitrepos/mtcg/src/main/java/uni/local/utils/JwtUtil.java
 /home/david/gitrepos/mtcg/src/main/java/uni/local/utils/TokenGenerator.java
+/home/david/gitrepos/mtcg/src/main/java/uni/local/utils/JwtUtil.java
 /home/david/gitrepos/mtcg/src/main/java/uni/local/services/CardService.java
 /home/david/gitrepos/mtcg/src/main/java/uni/local/utils/http/Constants.java
 /home/david/gitrepos/mtcg/src/main/java/uni/local/controllers/DeckController.java

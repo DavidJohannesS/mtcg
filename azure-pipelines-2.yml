@@ -5,7 +5,11 @@
 
 trigger:
 - meow
-
+resources:
+  pipelines:
+    - pipeline: build
+      source: 'Build'
+      trigger: none
 pool:
   name: 'Meow-hosted'
 

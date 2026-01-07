@@ -9,10 +9,61 @@ trigger:
 pool:
   name: 'Meow-hosted'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+jobs:
+- deployment: DeployToVM
+  environment: vm-prod
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - download: current
+          artifact: drop
 
-steps:
-- download: current
-  artifact: drop
+        - task: SSH@0
+          inputs:
+            sshEndpoint: 'vm'
+            runOptions: 'commands'
+            commands: |
+              # Ensure Docker is installed
+              if ! command -v docker &> /dev/null; then
+                sudo apt update
+                sudo apt install -y docker.io
+                sudo systemctl start docker
+                sudo systemctl enable docker
+              fi
+
+        - task: SSH@0
+          inputs:
+            sshEndpoint: 'vm'
+            runOptions: 'inline'
+            inline: |
+              mkdir -p ~/deploy
+
+        - task: SSH@0
+          inputs:
+            sshEndpoint: 'vm'
+            runOptions: 'commands'
+            commands: |
+              echo "Uploading JAR..."
+            readyTimeout: '20000'
+
+        - task: SSH@0
+          inputs:
+            sshEndpoint: 'vm'
+            runOptions: 'inline'
+            inline: |
+              cd ~/deploy
+              echo "Copying JAR from pipeline workspace..."
+              cp $(Pipeline.Workspace)/drop/mtcg-1.0-SNAPSHOT.jar .
+
+              # Create Dockerfile
+              cat > Dockerfile <<EOF
+              FROM openjdk:21
+              COPY mtcg-1.0-SNAPSHOT.jar /app.jar
+              ENTRYPOINT ["java", "-jar", "/app.jar"]
+              EOF
+
+              # Build and run container
+              docker rm -f mtcg-container || true
+              docker build -t mtcg-app .
+              docker run -d --name mtcg-container -p 8080:8080 mtcg-app

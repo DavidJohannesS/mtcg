@@ -62,7 +62,7 @@ jobs:
               COPY mtcg-1.0-SNAPSHOT.jar /app.jar
               ENTRYPOINT ["java", "-jar", "/app.jar"]
               EOF
-
+              sudo docker stop mtcg-container 2>/dev/null || true
               sudo docker rm -f mtcg-container 2>/dev/null || true
               sudo docker build -t mtcg-app .
 

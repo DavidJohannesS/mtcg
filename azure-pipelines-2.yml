@@ -20,9 +20,7 @@ jobs:
     runOnce:
       deploy:
         steps:
-        - download: build
-          artifact: drop
-
+       
         - task: SSH@0
           inputs:
             sshEndpoint: 'vm'
@@ -36,20 +34,22 @@ jobs:
                 sudo systemctl enable docker
               fi
 
+
         - task: SSH@0
           inputs:
             sshEndpoint: 'vm'
             runOptions: 'inline'
             inline: |
               mkdir -p ~/deploy
+              cd ~/deploy
 
-        - task: SSH@0
-          inputs:
-            sshEndpoint: 'vm'
-            runOptions: 'commands'
-            commands: |
-              echo "Uploading JAR..."
-            readyTimeout: '20000'
+              echo "Downloading JAR from Azure Artifacts..."
+              mvn dependency:get \
+                -DrepoUrl=https://pkgs.dev.azure.com/if21b153z/aa8fe752-cc5f-47d5-aa3b-b6dd1cfbb188/_packaging/meow-registry/maven/v1 \
+                -Dartifact=uni.local:mtcg:1.0-SNAPSHOT \
+                -Dtransitive=false
+
+              cp ~/.m2/repository/uni/local/mtcg/1.0-SNAPSHOT/mtcg-1.0-SNAPSHOT.jar .
 
         - task: SSH@0
           inputs:
@@ -57,17 +57,13 @@ jobs:
             runOptions: 'inline'
             inline: |
               cd ~/deploy
-              echo "Copying JAR from pipeline workspace..."
-              cp $(Pipeline.Workspace)/drop/mtcg-1.0-SNAPSHOT.jar .
 
-              # Create Dockerfile
               cat > Dockerfile <<EOF
-              FROM openjdk:21
+              FROM eclipse-temurin:21-jdk
               COPY mtcg-1.0-SNAPSHOT.jar /app.jar
               ENTRYPOINT ["java", "-jar", "/app.jar"]
               EOF
 
-              # Build and run container
               sudo docker rm -f mtcg-container || true
               sudo docker build -t mtcg-app .
               sudo docker run -d --name mtcg-container -p 8080:8080 mtcg-app

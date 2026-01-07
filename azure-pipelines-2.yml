@@ -63,7 +63,7 @@ jobs:
               ENTRYPOINT ["java", "-jar", "/app.jar"]
               EOF
 
-              sudo docker rm -f mtcg-container || true
+              sudo docker rm -f mtcg-container 2>/dev/null || true
               sudo docker build -t mtcg-app .
 
         # 4. Start Postgres + app container (variables now expand correctly)
@@ -74,8 +74,8 @@ jobs:
             inline: |
               cd ~/deploy
 
-              sudo docker rm -f mtcg-postgres || true
-              sudo docker volume create pgdata || true
+              sudo docker rm -f mtcg-postgres 2>/dev/null || true
+              sudo docker volume create pgdata 2>/dev/null|| true
 
               sudo docker run -d \
                 --name mtcg-postgres \

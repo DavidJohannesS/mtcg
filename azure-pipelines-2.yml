@@ -20,7 +20,7 @@ jobs:
     runOnce:
       deploy:
         steps:
-        - download: current
+        - download: build
           artifact: drop
 
         - task: SSH@0

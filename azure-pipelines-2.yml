@@ -42,8 +42,9 @@ jobs:
               cd ~/deploy
 
               # Start Postgres with variables
-              sudo docker volume create pgdata || true
-              sudo docker rm -f mtcg-postgres || true
+              sudo docker rm -f mtcg-postgres 2>/dev/null || true
+              sudo docker volume create pgdata >/dev/null 2>&1 || true
+
               sudo docker run -d \
                 --name mtcg-postgres \
                 -e POSTGRES_USER=$(DB_USER) \

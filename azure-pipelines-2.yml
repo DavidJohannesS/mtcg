@@ -90,10 +90,9 @@ jobs:
               sudo docker run -d \
                 --name mtcg-container \
                 -p 8080:8080 \
-                --link mtcg-postgres:postgres \
                 -e DB_HOST=mtcg-postgres \
                 -e DB_PORT=5432 \
                 -e DB_USER=$(DB_USER) \
                 -e DB_PASSWORD=$(DB_PASSWORD) \
-                -e DB_NAME=$(PG_DB) \
+                -e DB_NAME=$(DB_URL) \
                 mtcg-app 

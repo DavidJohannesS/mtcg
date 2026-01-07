@@ -11,6 +11,12 @@ pool:
 
 steps:
 - task: Maven@3
+  env:
+    DB_URL: $(DB_URL)
+    DB_USER: $(DB_USER)
+    DB_PASSWORD: $(DB_PASSWORD)
+    JWT_SECRET: $(JWT_SECRET)
+
   inputs:
     mavenPomFile: 'pom.xml'
     mavenOptions: '-Xmx3072m'

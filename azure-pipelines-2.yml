@@ -65,7 +65,7 @@ jobs:
               EOF
               sudo docker stop mtcg-container 2>/dev/null || true
               sudo docker rm -f mtcg-container 2>/dev/null || true
-              sudo docker build -t mtcg-app .
+              sudo docker build -t mtcg-app . 2>/dev/null
 
         # 4. Start Postgres + app container (variables now expand correctly)
         - task: SSH@0

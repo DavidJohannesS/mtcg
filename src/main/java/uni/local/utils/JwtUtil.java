@@ -7,8 +7,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
 
 public class JwtUtil {
-    private static final String SECRET_KEY = "admin-mtcgToken"; // Change this to a secure key
-
+   // private static final String SECRET_KEY = "admin-mtcgToken";
+    private static final String SECRET_KEY = System.getenv("JWT_SECRET");
     public static String generateToken(String username, int userId) {
         return Jwts.builder()
                    .setSubject(username)
